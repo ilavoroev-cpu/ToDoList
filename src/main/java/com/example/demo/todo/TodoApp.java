@@ -26,10 +26,11 @@ public class TodoApp extends Application {
         VBox root = new VBox();
         VBox other = new VBox();
         InitRegistrationTaskMenu(other);
-        root.setStyle("-fx-background-color: black");
+        root.setStyle("-fx-background-color: black;");
 
         HBox buttonContainer = new HBox(20);
         buttonContainer.setId("buttonContainer");
+        buttonContainer.setAlignment(Pos.CENTER);
 
         Button addTask = new Button("Добавить задачу");
         addTask.setOnAction(event -> {
@@ -45,6 +46,11 @@ public class TodoApp extends Application {
         buttonContainer.getChildren().addAll(addTask);
         buttonContainer.setStyle("-fx-padding: 20px; -fx-background-color: lightgray;");
         other.getChildren().addAll(buttonContainer);
+
+
+
+
+
         root.getChildren().addAll(other,registrationtaskmenu);
 
 
@@ -59,14 +65,19 @@ public class TodoApp extends Application {
 
     public static void InitRegistrationTaskMenu(VBox other){
 
-        registrationtaskmenu.setStyle("-fx-background-color: grey;");
+        registrationtaskmenu.setStyle("-fx-background-color: grey; -fx-max-width: 400px; -fx-padding: 20px; -fx-border-radius: 20px;" +
+                "-fx-background-radius: 20px;");
         registrationtaskmenu.setVisible(false);
+        registrationtaskmenu.setSpacing(15);
+
+
+
+        registrationtaskmenu.setTranslateX(300);
         TextArea description = new TextArea();
         description.setPromptText("Введите описание");
         description.setFont(new Font(14));
         description.setMinHeight(150);
         description.setId("description");
-
 
 
         TextField name = new TextField();
@@ -78,7 +89,9 @@ public class TodoApp extends Application {
 
 
 
-        HBox forButton = new HBox();
+        HBox forButton = new HBox(20);
+
+        forButton.setAlignment(Pos.CENTER);
         Button confirmation = new Button("Создать задачу");
         confirmation.setOnAction(event -> {
 
@@ -99,7 +112,6 @@ public class TodoApp extends Application {
 
         forButton.getChildren().addAll(confirmation, cancel);
         registrationtaskmenu.getChildren().addAll(name, description, forButton);
-
 
 
     }
