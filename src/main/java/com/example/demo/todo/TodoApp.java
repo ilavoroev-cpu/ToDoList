@@ -11,6 +11,8 @@ import javafx.scene.layout.HBox;
 
 
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 
 import javafx.stage.Stage;
@@ -20,8 +22,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class TodoApp extends Application {
-    private static HBox tasks = new HBox();
-    private static VBox page = new VBox();
+    private static int numPage = -1;
+    private static HBox tasks = new HBox(10);
+    private static VBox page = new VBox(10);
+    private static VBox thisPage = new VBox();
     private static ArrayList<VBox> pages = new ArrayList<>();
     private static VBox registrationtaskmenu = new VBox();
     private static HashMap<Task, VBox> mapPicture = new HashMap<>();
@@ -29,8 +33,9 @@ public class TodoApp extends Application {
     public void start(Stage stage) throws IOException {
         VBox root = new VBox();
         VBox other = new VBox();
+
         InitRegistrationTaskMenu(other);
-        root.setStyle("-fx-background-color: black;");
+        root.setStyle("-fx-background-color: white;");
 
         HBox buttonContainer = new HBox(20);
         buttonContainer.setId("buttonContainer");
@@ -46,7 +51,47 @@ public class TodoApp extends Application {
         });
 
 
-        buttonContainer.getChildren().addAll(addTask);
+        VBox forPage = new VBox(5);
+
+        TextField numberOfpage = new TextField();
+        numberOfpage.setMaxWidth(120);
+        numberOfpage.setPromptText("Введите номер...");
+
+
+
+        Button searchPage = new Button("Открыть страницу");
+        searchPage.setOnAction(event -> {
+            try {
+                numPage = Integer.parseInt(numberOfpage.getText());
+                if ((numPage - 1 == pages.size()) && pages.size() == 0){return;}
+                else if(numPage - 1 == pages.size()){
+
+                    other.getChildren().remove(page);
+                    page = thisPage;
+                    other.getChildren().add(page);
+                    return;
+                }
+                other.getChildren().remove(page);
+
+                page = pages.get(numPage - 1);
+                other.getChildren().add(page);
+            }catch (NumberFormatException ex){
+                Alert alert = new Alert(Alert.AlertType.ERROR, "Неверный ввод");
+                alert.showAndWait();
+            }
+            catch (IndexOutOfBoundsException ex){
+                Alert alert = new Alert(Alert.AlertType.ERROR, "Неверный cтраница");
+                alert.showAndWait();
+            }
+        });
+
+        forPage.setStyle("-fx-padding: 20px; -fx-background-color:");
+        forPage.setStyle("-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0, 0, 5);");
+
+        forPage.getChildren().addAll(numberOfpage, searchPage);
+
+
+        buttonContainer.getChildren().addAll(addTask, forPage);
         buttonContainer.setStyle("-fx-padding: 20px; -fx-background-color: lightgray;");
         other.getChildren().addAll(buttonContainer);
 
@@ -93,6 +138,7 @@ public class TodoApp extends Application {
 
 
 
+
         HBox forButton = new HBox(20);
 
         forButton.setAlignment(Pos.CENTER);
@@ -102,6 +148,11 @@ public class TodoApp extends Application {
             other.setDisable(false);
             other.setVisible(true);
             Task task = new Task(name.getText(), description.getText());
+            if (numPage - 1 != pages.size() && numPage > 0){
+                Alert alert = new Alert(Alert.AlertType.ERROR, "Перейдите на последнюю страницу");
+                alert.showAndWait();
+                return;
+            }
             if (mapPicture.containsKey(task)){
                 Alert alert = new Alert(Alert.AlertType.ERROR, "Такая задача уже есть");
                 alert.showAndWait();
@@ -110,6 +161,7 @@ public class TodoApp extends Application {
 
             VBox pictureTask = createTask(name.getText());
             tasks.getChildren().add(pictureTask);
+
 
 
             mapPicture.put(task, pictureTask);
@@ -122,17 +174,20 @@ public class TodoApp extends Application {
             description.setText("");
 
 
-            if (page.getChildren().size() == 1 && tasks.getChildren().size() == 7){
+            if (page.getChildren().size() == 2 && tasks.getChildren().size() == 4){
+
+
                 pages.add(page);
                 other.getChildren().remove(page);
-                page = new VBox();
+                page = new VBox(10);
                 other.getChildren().add(page);
             }
-            if (tasks.getChildren().size() == 7){
-                tasks = new HBox(pictureTask);
+            if (tasks.getChildren().size() == 4){
+                tasks = new HBox(10);
+                tasks.getChildren().add(pictureTask);
                 page.getChildren().add(tasks);
             }
-
+            thisPage = page;
         });
 
         Button cancel = new Button("Отмена");
@@ -157,10 +212,17 @@ public class TodoApp extends Application {
         pictureTask.setPrefSize(150, 100);
         pictureTask.setMaxSize(150, 100);
 
-        pictureTask.setStyle("-fx-background-color: white; -fx-padding: 20px; -fx-background-radius: 5px;" +
-                "-fx-border-radius: 5px");
+        pictureTask.setStyle(
+                "-fx-background-color: black; " +
+                        "-fx-padding: 20px; " +
+                        "-fx-background-radius: 5px; " +
+                        "-fx-border-radius: 5px; " +
+                        "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 15, 0, 0, 0);"
+        );
         Label taskName = new Label(name);
+        taskName.setTextFill(Color.WHITE);
         pictureTask.getChildren().add(taskName);
+
 
         return pictureTask;
     }
