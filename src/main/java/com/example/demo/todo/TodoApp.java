@@ -10,6 +10,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 
 
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
@@ -31,7 +32,7 @@ public class TodoApp extends Application {
     private static HashMap<Task, VBox> mapPicture = new HashMap<>();
     @Override
     public void start(Stage stage) throws IOException {
-        VBox root = new VBox();
+        StackPane root = new StackPane();
         VBox other = new VBox();
 
         InitRegistrationTaskMenu(other);
@@ -44,7 +45,6 @@ public class TodoApp extends Application {
         Button addTask = new Button("Добавить задачу");
         addTask.setOnAction(event -> {
             registrationtaskmenu.setVisible(true);
-            other.setVisible(false);
             other.setDisable(true);
 
 
@@ -185,7 +185,7 @@ public class TodoApp extends Application {
             description.setText("");
 
 
-            if (page.getChildren().size() == 2 && tasks.getChildren().size() == 4){
+            if (page.getChildren().size() == 4 && tasks.getChildren().size() == 7){
 
 
                 pages.add(page);
@@ -193,7 +193,7 @@ public class TodoApp extends Application {
                 page = new VBox(10);
                 other.getChildren().add(page);
             }
-            if (tasks.getChildren().size() == 4){
+            if (tasks.getChildren().size() == 7){
                 tasks = new HBox(10);
                 tasks.getChildren().add(pictureTask);
                 page.getChildren().add(tasks);
