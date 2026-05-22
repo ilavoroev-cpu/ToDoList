@@ -18,9 +18,11 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 public class TodoApp extends Application {
-    public static VBox registrationtaskmenu = new VBox();
+    private static VBox registrationtaskmenu = new VBox();
+    private static HashMap<Task, VBox> mapPicture = new HashMap<>();
     @Override
     public void start(Stage stage) throws IOException {
         VBox root = new VBox();
