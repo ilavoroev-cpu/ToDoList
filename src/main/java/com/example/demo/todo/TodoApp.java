@@ -63,7 +63,20 @@ public class TodoApp extends Application {
         searchPage.setOnAction(event -> {
             try {
                 numPage = Integer.parseInt(numberOfpage.getText());
-                if ((numPage - 1 == pages.size()) && pages.size() == 0){return;}
+                if (numPage <= 0){
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION, "Неверный cтраница");
+                    alert.showAndWait();
+                    numPage = -1;
+                    return;
+                }
+                if ( numPage == 1 && pages.size() == 0){return;}
+                if (numPage > pages.size() + 1){
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION, "Неверный cтраница");
+                    alert.showAndWait();
+                    numPage = -1;
+                    return;
+                }
+
                 else if(numPage - 1 == pages.size()){
 
                     other.getChildren().remove(page);
@@ -76,13 +89,11 @@ public class TodoApp extends Application {
                 page = pages.get(numPage - 1);
                 other.getChildren().add(page);
             }catch (NumberFormatException ex){
-                Alert alert = new Alert(Alert.AlertType.ERROR, "Неверный ввод");
+                Alert alert = new Alert(Alert.AlertType.INFORMATION, "Неверный ввод");
                 alert.showAndWait();
+                numPage = -1;
             }
-            catch (IndexOutOfBoundsException ex){
-                Alert alert = new Alert(Alert.AlertType.ERROR, "Неверный cтраница");
-                alert.showAndWait();
-            }
+
         });
 
         forPage.setStyle("-fx-padding: 20px; -fx-background-color:");
