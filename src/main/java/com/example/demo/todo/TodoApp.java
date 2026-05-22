@@ -2,38 +2,50 @@ package com.example.demo.todo;
 
 import javafx.application.Application;
 
+
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.layout.BorderPane;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
+
 import javafx.scene.layout.HBox;
+
+
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 
 import javafx.stage.Stage;
 
 import java.io.IOException;
 
 public class TodoApp extends Application {
+    public static VBox registrationtaskmenu = new VBox();
     @Override
     public void start(Stage stage) throws IOException {
-        BorderPane root = new BorderPane();
+        VBox root = new VBox();
+        VBox other = new VBox();
+        InitRegistrationTaskMenu(other);
         root.setStyle("-fx-background-color: black");
 
         HBox buttonContainer = new HBox(20);
+        buttonContainer.setId("buttonContainer");
 
         Button addTask = new Button("Добавить задачу");
         addTask.setOnAction(event -> {
-            //всплывает окошко
+            registrationtaskmenu.setVisible(true);
+            buttonContainer.setVisible(false);
+            other.setDisable(true);
+
         });
+
 
 
 
         buttonContainer.getChildren().addAll(addTask);
         buttonContainer.setStyle("-fx-padding: 20px; -fx-background-color: lightgray;");
-
-
-        root.setBottom(buttonContainer);
-
-
-
+        other.getChildren().addAll(buttonContainer);
+        root.getChildren().addAll(other,registrationtaskmenu);
 
 
 
@@ -43,5 +55,58 @@ public class TodoApp extends Application {
         stage.setScene(scene);
         stage.show();
     }
+
+
+    public static void InitRegistrationTaskMenu(VBox other){
+
+        registrationtaskmenu.setStyle("-fx-background-color: grey;");
+        registrationtaskmenu.setVisible(false);
+        TextArea description = new TextArea();
+        description.setPromptText("Введите описание");
+        description.setFont(new Font(14));
+        description.setMinHeight(150);
+        description.setId("description");
+
+
+
+        TextField name = new TextField();
+        name.setPromptText("Введите название задачи");
+        name.setMinHeight(50);
+        name.setFont(new Font(20));
+        name.setId("name");
+
+
+
+
+        HBox forButton = new HBox();
+        Button confirmation = new Button("Создать задачу");
+        confirmation.setOnAction(event -> {
+
+            //создание задачи и отображение
+
+            other.setDisable(false);
+        });
+
+        Button cancel = new Button("Отмена");
+        cancel.setOnAction(event -> {
+            registrationtaskmenu.setVisible(false);
+            HBox buttonContainer = (HBox) other.lookup("#buttonContainer");
+            if (buttonContainer != null) {
+                buttonContainer.setVisible(true);
+                other.setDisable(false);
+            }
+        });
+
+        forButton.getChildren().addAll(confirmation, cancel);
+        registrationtaskmenu.getChildren().addAll(name, description, forButton);
+
+
+
+    }
+
+
+
+
+
 
 }
