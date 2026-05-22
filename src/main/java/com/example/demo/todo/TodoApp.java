@@ -5,10 +5,7 @@ import javafx.application.Application;
 
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 
 import javafx.scene.layout.HBox;
 
@@ -104,8 +101,13 @@ public class TodoApp extends Application {
 
             other.setDisable(false);
             other.setVisible(true);
-
             Task task = new Task(name.getText(), description.getText());
+            if (mapPicture.containsKey(task)){
+                Alert alert = new Alert(Alert.AlertType.ERROR, "Такая задача уже есть");
+                alert.showAndWait();
+                return;
+            }
+
             VBox pictureTask = createTask(name.getText());
             tasks.getChildren().add(pictureTask);
 
