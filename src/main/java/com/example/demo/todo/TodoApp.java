@@ -189,7 +189,7 @@ public class TodoApp extends Application {
             description.setText("");
 
 
-            if (page.getChildren().size() == 1 && tasks.getChildren().size() == 2){
+            if (page.getChildren().size() == 4 && tasks.getChildren().size() == 7){
                 numberWithBottomPage.setText(String.valueOf(Integer.parseInt(numberWithBottomPage.getText()) + 1));
 
                 pages.add(page);
@@ -197,7 +197,7 @@ public class TodoApp extends Application {
                 page = new VBox(10);
                 other.getChildren().add(page);
             }
-            if (tasks.getChildren().size() == 2){
+            if (tasks.getChildren().size() == 7){
                 tasks = new HBox(10);
                 tasks.getChildren().add(pictureTask);
                 page.getChildren().add(tasks);
