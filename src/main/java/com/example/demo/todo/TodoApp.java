@@ -6,6 +6,7 @@ import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 
@@ -18,9 +19,13 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class TodoApp extends Application {
+    private static HBox tasks = new HBox();
+    private static VBox page = new VBox();
+    private static ArrayList<VBox> pages = new ArrayList<>();
     private static VBox registrationtaskmenu = new VBox();
     private static HashMap<Task, VBox> mapPicture = new HashMap<>();
     @Override
@@ -43,12 +48,9 @@ public class TodoApp extends Application {
         });
 
 
-
-
         buttonContainer.getChildren().addAll(addTask);
         buttonContainer.setStyle("-fx-padding: 20px; -fx-background-color: lightgray;");
         other.getChildren().addAll(buttonContainer);
-
 
 
 
@@ -96,14 +98,35 @@ public class TodoApp extends Application {
         forButton.setAlignment(Pos.CENTER);
         Button confirmation = new Button("Создать задачу");
         confirmation.setOnAction(event -> {
+
             other.setDisable(false);
             other.setVisible(true);
 
             Task task = new Task(name.getText(), description.getText());
-            mapPicture.put(task, createTask(name.getText(), other));
+            VBox pictureTask = createTask(name.getText());
+            other.getChildren().add(pictureTask);
+
+
+            mapPicture.put(task, pictureTask);
+
+
             registrationtaskmenu.setVisible(false);
+
+
             name.setText("");
             description.setText("");
+
+
+            if (page.getChildren().size() == 5 && tasks.getChildren().size() == 7){
+                pages.add(page);
+                page.setVisible(false);
+                page = new VBox();
+                other.getChildren().add(page);
+            }
+            if (tasks.getChildren().size() == 7){
+                tasks = new HBox(pictureTask);
+                page.getChildren().add(tasks);
+            }
 
         });
 
@@ -123,11 +146,16 @@ public class TodoApp extends Application {
 
     }
 
-    public static VBox createTask(String name, VBox other){
-        return new VBox();
+    public static VBox createTask(String name){
+        VBox pictureTask = new VBox();
+        pictureTask.setMinSize(100, 70);
+        pictureTask.setPrefSize(100, 70);
+        pictureTask.setMaxSize(100, 70);
+
+        pictureTask.setStyle("-fx-background-color: white;");
+        Label taskName = new Label(name);
+        pictureTask.getChildren().add(taskName);
+
+        return pictureTask;
     }
-
-
-
-
 }
