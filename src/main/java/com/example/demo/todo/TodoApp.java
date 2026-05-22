@@ -3,15 +3,14 @@ package com.example.demo.todo;
 import javafx.application.Application;
 
 
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.*;
 
 
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
@@ -23,6 +22,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class TodoApp extends Application {
+
+    private static Label numberWithBottomPage = new Label("1");
     private static int numPage = -1;
     private static HBox tasks = new HBox(10);
     private static VBox page = new VBox(10);
@@ -30,9 +31,10 @@ public class TodoApp extends Application {
     private static ArrayList<VBox> pages = new ArrayList<>();
     private static VBox registrationtaskmenu = new VBox();
     private static HashMap<Task, VBox> mapPicture = new HashMap<>();
+    private static StackPane root = new StackPane();
     @Override
     public void start(Stage stage) throws IOException {
-        StackPane root = new StackPane();
+
         VBox other = new VBox();
 
         InitRegistrationTaskMenu(other);
@@ -82,11 +84,13 @@ public class TodoApp extends Application {
                     other.getChildren().remove(page);
                     page = thisPage;
                     other.getChildren().add(page);
+                    numberWithBottomPage.setText(String.valueOf(numPage));
                     return;
                 }
                 other.getChildren().remove(page);
 
                 page = pages.get(numPage - 1);
+                numberWithBottomPage.setText(String.valueOf(numPage));
                 other.getChildren().add(page);
             }catch (NumberFormatException ex){
                 Alert alert = new Alert(Alert.AlertType.INFORMATION, "Неверный ввод");
@@ -96,13 +100,13 @@ public class TodoApp extends Application {
 
         });
 
-        forPage.setStyle("-fx-padding: 20px; -fx-background-color:");
+        forPage.setStyle("-fx-padding: 20px;");
         forPage.setStyle("-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0, 0, 5);");
 
         forPage.getChildren().addAll(numberOfpage, searchPage);
 
 
-        buttonContainer.getChildren().addAll(addTask, forPage);
+        buttonContainer.getChildren().addAll(addTask, forPage,numberWithBottomPage);
         buttonContainer.setStyle("-fx-padding: 20px; -fx-background-color: lightgray;");
         other.getChildren().addAll(buttonContainer);
 
@@ -170,7 +174,7 @@ public class TodoApp extends Application {
                 return;
             }
 
-            VBox pictureTask = createTask(name.getText());
+            VBox pictureTask = createTask(name.getText(), description.getText());
             tasks.getChildren().add(pictureTask);
 
 
@@ -185,15 +189,15 @@ public class TodoApp extends Application {
             description.setText("");
 
 
-            if (page.getChildren().size() == 4 && tasks.getChildren().size() == 7){
-
+            if (page.getChildren().size() == 1 && tasks.getChildren().size() == 2){
+                numberWithBottomPage.setText(String.valueOf(Integer.parseInt(numberWithBottomPage.getText()) + 1));
 
                 pages.add(page);
                 other.getChildren().remove(page);
                 page = new VBox(10);
                 other.getChildren().add(page);
             }
-            if (tasks.getChildren().size() == 7){
+            if (tasks.getChildren().size() == 2){
                 tasks = new HBox(10);
                 tasks.getChildren().add(pictureTask);
                 page.getChildren().add(tasks);
@@ -215,16 +219,18 @@ public class TodoApp extends Application {
         registrationtaskmenu.getChildren().addAll(name, description, forButton);
 
 
+
+
     }
 
-    public static VBox createTask(String name){
+    public static VBox createTask(String name, String description){
         VBox pictureTask = new VBox();
         pictureTask.setMinSize(150, 100);
         pictureTask.setPrefSize(150, 100);
         pictureTask.setMaxSize(150, 100);
 
         pictureTask.setStyle(
-                "-fx-background-color: black; " +
+                "-fx-background-color: grey; " +
                         "-fx-padding: 20px; " +
                         "-fx-background-radius: 5px; " +
                         "-fx-border-radius: 5px; " +
@@ -232,7 +238,17 @@ public class TodoApp extends Application {
         );
         Label taskName = new Label(name);
         taskName.setTextFill(Color.WHITE);
-        pictureTask.getChildren().add(taskName);
+
+        Button info = new Button("Подробнее");
+        info.setStyle("-fx-background-color: lightgray;");
+        BorderPane checkInfo = new BorderPane();
+        checkInfo.setBottom(info);
+        checkInfo.setPadding(new Insets(15));
+
+
+
+
+        pictureTask.getChildren().addAll(taskName, checkInfo);
 
 
         return pictureTask;
