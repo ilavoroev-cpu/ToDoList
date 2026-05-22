@@ -45,6 +45,7 @@ public class TodoApp extends Application {
             other.setVisible(false);
             other.setDisable(true);
 
+
         });
 
 
@@ -52,7 +53,8 @@ public class TodoApp extends Application {
         buttonContainer.setStyle("-fx-padding: 20px; -fx-background-color: lightgray;");
         other.getChildren().addAll(buttonContainer);
 
-
+        page.getChildren().add(tasks);
+        other.getChildren().add(page);
 
 
         root.getChildren().addAll(other,registrationtaskmenu);
@@ -68,6 +70,7 @@ public class TodoApp extends Application {
 
 
     public static void InitRegistrationTaskMenu(VBox other){
+
 
         registrationtaskmenu.setStyle("-fx-background-color: grey; -fx-max-width: 400px; -fx-padding: 20px; -fx-border-radius: 20px;" +
                 "-fx-background-radius: 20px;");
@@ -104,7 +107,7 @@ public class TodoApp extends Application {
 
             Task task = new Task(name.getText(), description.getText());
             VBox pictureTask = createTask(name.getText());
-            other.getChildren().add(pictureTask);
+            tasks.getChildren().add(pictureTask);
 
 
             mapPicture.put(task, pictureTask);
@@ -117,9 +120,9 @@ public class TodoApp extends Application {
             description.setText("");
 
 
-            if (page.getChildren().size() == 5 && tasks.getChildren().size() == 7){
+            if (page.getChildren().size() == 1 && tasks.getChildren().size() == 7){
                 pages.add(page);
-                page.setVisible(false);
+                other.getChildren().remove(page);
                 page = new VBox();
                 other.getChildren().add(page);
             }
@@ -148,11 +151,12 @@ public class TodoApp extends Application {
 
     public static VBox createTask(String name){
         VBox pictureTask = new VBox();
-        pictureTask.setMinSize(100, 70);
-        pictureTask.setPrefSize(100, 70);
-        pictureTask.setMaxSize(100, 70);
+        pictureTask.setMinSize(150, 100);
+        pictureTask.setPrefSize(150, 100);
+        pictureTask.setMaxSize(150, 100);
 
-        pictureTask.setStyle("-fx-background-color: white;");
+        pictureTask.setStyle("-fx-background-color: white; -fx-padding: 20px; -fx-background-radius: 5px;" +
+                "-fx-border-radius: 5px");
         Label taskName = new Label(name);
         pictureTask.getChildren().add(taskName);
 
