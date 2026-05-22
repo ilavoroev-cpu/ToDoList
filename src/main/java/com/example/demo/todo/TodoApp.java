@@ -37,7 +37,7 @@ public class TodoApp extends Application {
         Button addTask = new Button("Добавить задачу");
         addTask.setOnAction(event -> {
             registrationtaskmenu.setVisible(true);
-            buttonContainer.setVisible(false);
+            other.setVisible(false);
             other.setDisable(true);
 
         });
@@ -96,10 +96,15 @@ public class TodoApp extends Application {
         forButton.setAlignment(Pos.CENTER);
         Button confirmation = new Button("Создать задачу");
         confirmation.setOnAction(event -> {
-
-            //создание задачи и отображение
-
             other.setDisable(false);
+            other.setVisible(true);
+
+            Task task = new Task(name.getText(), description.getText());
+            mapPicture.put(task, createTask(name.getText(), other));
+            registrationtaskmenu.setVisible(false);
+            name.setText("");
+            description.setText("");
+
         });
 
         Button cancel = new Button("Отмена");
@@ -107,7 +112,7 @@ public class TodoApp extends Application {
             registrationtaskmenu.setVisible(false);
             HBox buttonContainer = (HBox) other.lookup("#buttonContainer");
             if (buttonContainer != null) {
-                buttonContainer.setVisible(true);
+                other.setVisible(true);
                 other.setDisable(false);
             }
         });
@@ -118,7 +123,9 @@ public class TodoApp extends Application {
 
     }
 
-
+    public static VBox createTask(String name, VBox other){
+        return new VBox();
+    }
 
 
 
